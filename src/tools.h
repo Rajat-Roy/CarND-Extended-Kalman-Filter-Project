@@ -1,35 +1,32 @@
 #ifndef TOOLS_H_
 #define TOOLS_H_
+
 #include <vector>
 #include "Eigen/Dense"
 
-using Eigen::MatrixXd;
-using Eigen::VectorXd;
-using namespace std;
-
 class Tools {
-
-  // Variables for running computation of root mean standard
-  // error using Kahan sum
-  VectorXd mse;
-  VectorXd lastmse;
-  VectorXd residual;
-  VectorXd kahanerror;
-  VectorXd rmse;
-
-  // Reset running root mean standard error calculation to zero
-  void resetRMSE();
-
-public:
+ public:
+  /**
+   * Constructor.
+   */
   Tools();
+
+  /**
+   * Destructor.
+   */
   virtual ~Tools();
 
-  // Method to return running root mean standard error
-  VectorXd CalculateRMSE(const vector<VectorXd> &estimations, const vector<VectorXd> &ground_truth);
+  /**
+   * A helper method to calculate RMSE.
+   */
+  Eigen::VectorXd CalculateRMSE(const std::vector<Eigen::VectorXd> &estimations, 
+                                const std::vector<Eigen::VectorXd> &ground_truth);
 
-  // Method to calculate Jacobian for radar measurements
-  MatrixXd CalculateJacobian(const VectorXd& x_state);
+  /**
+   * A helper method to calculate Jacobians.
+   */
+  Eigen::MatrixXd CalculateJacobian(const Eigen::VectorXd& x_state);
 
 };
 
-#endif /* TOOLS_H_ */
+#endif  // TOOLS_H_

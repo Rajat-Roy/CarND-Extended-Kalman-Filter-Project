@@ -3,26 +3,12 @@
 
 using Eigen::VectorXd;
 using Eigen::MatrixXd;
+using std::cout;
+using std::endl;
 using std::vector;
-
-Tools::Tools() : mse(4), 
-    lastmse(4),
-    residual(4),
-    kahanerror(4),
-    rmse(4)
-{
-  resetRMSE();
-}
 
 Tools::~Tools() {}
 
-void Tools::resetRMSE()
-{
-  mse << 0, 0, 0, 0;
-  lastmse << 0, 0, 0, 0;
-  residual << 0, 0, 0, 0;
-  kahanerror << 0, 0, 0, 0;
-}
 
 // Calculate the RMSE
 VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
