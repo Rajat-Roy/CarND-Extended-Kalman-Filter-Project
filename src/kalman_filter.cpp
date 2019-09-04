@@ -80,9 +80,15 @@ void KalmanFilter::UpdateEKF(const VectorXd &z)
 
   // Update the state using Extended Kalman Filter equations
   VectorXd y = z - hofx;
-  if( y[1] > PI )
+  // if( y[1] > PI )
+  //   y[1] -= 2.f*PI;
+  // if( y[1] < -PI )
+  //   y[1] += 2.f*PI;
+
+  while ( y[1] > PI ) 
     y[1] -= 2.f*PI;
-  if( y[1] < -PI )
+
+  while ( y[1] < -PI )
     y[1] += 2.f*PI;
   MatrixXd Hjt = Hj_.transpose();
   MatrixXd S = Hj_*P_*Hjt + R_ekf_;
