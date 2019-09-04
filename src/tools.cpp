@@ -7,6 +7,8 @@ using std::cout;
 using std::endl;
 using std::vector;
 
+Tools::Tools() {}
+
 Tools::~Tools() {}
 
 
