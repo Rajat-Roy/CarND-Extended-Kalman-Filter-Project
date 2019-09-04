@@ -1,11 +1,12 @@
 #include "FusionEKF.h"
-#include "tools.h"
-#include "Eigen/Dense"
 #include <iostream>
+#include "Eigen/Dense"
+#include "tools.h"
 
-using namespace std;
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
+using std::cout;
+using std::endl;
 using std::vector;
 
 /*
@@ -17,14 +18,7 @@ FusionEKF::FusionEKF() {
   previous_timestamp_ = 0;
 
   // initializing matrices
-  // It isn't really necessary to have persistent
-  // storage for these in FusionEKF.
-  // They can just as easily be constructed at local scope
-  // the first time ProcessMeasurement() is called,
-  // then used to initialize persistent containers in
-  // KalmanFilter.  I do use them to initialize containers 
-  // in KalmanFilter, but I'm keeping them here as well because
-  // they are small and if it ain't broke, don't fix it.
+  
   R_laser_ = MatrixXd(2, 2);
   R_radar_ = MatrixXd(3, 3);
   H_laser_ = MatrixXd(2, 4);
@@ -92,8 +86,8 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack)
     MatrixXd P(4, 4);
     P << 1, 0, 0, 0,
 	 0, 1, 0, 0,
-         0, 0, 1000, 0,
-         0, 0, 0, 1000;
+         0, 0, 100, 0,
+         0, 0, 0, 100;
 
     // Initialize transition matrix
     MatrixXd F(4, 4);
