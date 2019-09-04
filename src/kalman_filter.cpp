@@ -46,9 +46,9 @@ void KalmanFilter::Update(const VectorXd &z)
 void KalmanFilter::UpdateEKF(const VectorXd &z) 
 {
   float px = x_(0);
-  float py = x_[1];
-  float vx = x_[2];
-  float vy = x_[3];
+  float py = x_(1);
+  float vx = x_(2);
+  float vy = x_(3);
 
   H_ = tools.CalculateJacobian( x_ );
   VectorXd h(3);
@@ -68,7 +68,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z)
   while ( y(1) > M_PI ) 
     y(1) -= 2 * M_PI;
 
-  while ( y[1] < -M_PI )
+  while ( y(1) < -M_PI )
     y(1) += 2 * M_PI;
 
   MatrixXd Hjt = H_.transpose();
