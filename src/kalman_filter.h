@@ -8,33 +8,6 @@ class KalmanFilter {
 
   public:
 
-  // state vector
-  Eigen::VectorXd x_;
-
-  // state covariance matrix
-  Eigen::MatrixXd P_;
-
-  // state transition matrix
-  Eigen::MatrixXd F_;
-
-  // process covariance matrix
-  Eigen::MatrixXd Q_;
-
-  // measurement matrix
-  Eigen::MatrixXd H_;
-
-  // measurement Jacobian for EKF equations
-  Eigen::MatrixXd Hj_;
-
-  // measurement covariance matrix
-  Eigen::MatrixXd R_;
-
-  // measurement covariance matrix for EKF equations
-  Eigen::MatrixXd R_ekf_;
-
-  // 4x4 identity matrix
-  Eigen::MatrixXd I_;
-
   /**
    * Constructor
    */
@@ -82,6 +55,33 @@ class KalmanFilter {
    * @param z The measurement at k+1
    */
   void UpdateEKF(const Eigen::VectorXd &z);
+
+  // state vector
+  Eigen::VectorXd x_;
+
+  // state covariance matrix
+  Eigen::MatrixXd P_;
+
+  // state transition matrix
+  Eigen::MatrixXd F_;
+
+  // process covariance matrix
+  Eigen::MatrixXd Q_;
+
+  // measurement matrix
+  Eigen::MatrixXd H_;
+
+  // measurement Jacobian for EKF equations
+  Eigen::MatrixXd Hj_;
+
+  // measurement covariance matrix
+  Eigen::MatrixXd R_;
+
+  // measurement covariance matrix for EKF equations
+  Eigen::MatrixXd R_ekf_;
+
+  // 4x4 identity matrix
+  Eigen::MatrixXd I_;
 
 };
 
