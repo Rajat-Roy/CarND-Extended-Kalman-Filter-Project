@@ -84,10 +84,10 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack)
     // initial values of 0 for vx and vy are highly uncertain, and should not be
     // given very much weight in subsequent measurement updates.
     MatrixXd P(4, 4);
-    P << 1, 0, 0, 0,
-	 0, 1, 0, 0,
-         0, 0, 10000, 0,
-         0, 0, 0, 10000;
+    P << 100, 0, 0, 0,
+	 0, 100, 0, 0,
+         0, 0, 1000, 0,
+         0, 0, 0, 1000;
 
     // Initialize transition matrix
     MatrixXd F(4, 4);
