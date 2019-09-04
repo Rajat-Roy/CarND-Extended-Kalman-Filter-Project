@@ -59,6 +59,28 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack)
 
     cout << "Initializing FusionEKF" << endl;
 
+    MatrixXd P(4, 4);
+    P << 100, 0, 0, 0,
+	       0, 100, 0, 0,
+         0, 0, 1000, 0,
+         0, 0, 0, 1000;
+
+    // Initialize transition matrix
+    MatrixXd F(4, 4);
+    F << 1, 0, 0, 0,
+	       0, 1, 0, 0,
+         0, 0, 1, 0,
+         0, 0, 0, 1;
+
+    // Initialize measurement matrix for laser measurements
+    H_laser_ << 1, 0, 0, 0,
+               0, 1, 0, 0;
+
+    // Initialize ekf_ with the first state vector, 
+    // estimated initial state covariance matrix,
+    // and an empty matrix for Q
+    MatrixXd Q(4,4);
+
     VectorXd x(4);
     if( measurement_pack.sensor_type_ == MeasurementPackage::RADAR ) 
     {
@@ -66,11 +88,15 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack)
       float rho = measurement_pack.raw_measurements_[0];
       float phi = measurement_pack.raw_measurements_[1];
       x << rho*cos(phi), rho*sin(phi), 0.f, 0.f;
+      ekf_.H_ = Hj_;
+      ekf_.R_ = R_radar_;
     }
     else if( measurement_pack.sensor_type_ == MeasurementPackage::LASER ) 
     {
       // Initialize state.
       x << measurement_pack.raw_measurements_[0], measurement_pack.raw_measurements_[1], 0.f, 0.f;
+      ekf_.H_ = H_laser_;
+      ekf_.R_ = R_laser_;
     }
 
     previous_timestamp_ = measurement_pack.timestamp_;
@@ -83,35 +109,15 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack)
     // we are telling the Kalman filter equations that these (totally fabricated) 
     // initial values of 0 for vx and vy are highly uncertain, and should not be
     // given very much weight in subsequent measurement updates.
-    MatrixXd P(4, 4);
-    P << 100, 0, 0, 0,
-	 0, 100, 0, 0,
-         0, 0, 1000, 0,
-         0, 0, 0, 1000;
 
-    // Initialize transition matrix
-    MatrixXd F(4, 4);
-    F << 1, 0, 0, 0,
-	 0, 1, 0, 0,
-         0, 0, 1, 0,
-         0, 0, 0, 1;
-
-    // Initialize measurement matrix for laser measurements
-    H_laser_ << 1, 0, 0, 0,
-               0, 1, 0, 0;
-
-    // Initialize ekf_ with the first state vector, 
-    // estimated initial state covariance matrix,
-    // and an empty matrix for Q
-    MatrixXd Q(4,4);
-    ekf_.Init( x, /*x_in*/ 
-        P, /*P_in*/ 
-        F, /*F_in*/
-        H_laser_, /*H_in*/ 
-        Hj_, /*Hj_in*/ 
-        R_laser_, /*R_in*/ 
-        R_radar_, /*R_ekf_in*/ 
-        Q ); /*Q_in*/
+    // ekf_.Init( x, /*x_in*/ 
+    //     P, /*P_in*/ 
+    //     F, /*F_in*/
+    //     H_laser_, /*H_in*/ 
+    //     Hj_, /*Hj_in*/ 
+    //     R_laser_, /*R_in*/ 
+    //     R_radar_, /*R_ekf_in*/ 
+    //     Q ); /*Q_in*/
 
     // done initializing, no need to predict or update
     is_initialized_ = true;
