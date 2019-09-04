@@ -77,15 +77,15 @@ void KalmanFilter::UpdateEKF(const VectorXd &z)
 
   Hj_ = tools.CalculateJacobian( x_ );
   VectorXd h(3);
-  float c1 = px*px + py*py;
-  float c2 = sqrt(c1); 
   
-  if (fabs(c2) < 0.0001) {
+  float c1 = sqrt(px*px + py*py); 
+  
+  if (fabs(c1) < 0.0001) {
     cout << "Division by Zero" << endl;
     return;
   }
 
-  h << c2, atan2( py, px ), c1/c2;
+  h << c1, atan2( py, px ),  (px*vx + py*vy )/c1;
 
   // Update the state using Extended Kalman Filter equations
   VectorXd y = z - h;
