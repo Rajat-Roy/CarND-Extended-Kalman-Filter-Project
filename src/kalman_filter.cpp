@@ -1,43 +1,15 @@
 #include "kalman_filter.h"
-#define PI 3.14159265
-
 #include <iostream>
-using namespace std;
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
+using std::cout;
+using std::endl;
+using std::vector;
 
 KalmanFilter::KalmanFilter() {}
 
 KalmanFilter::~KalmanFilter() {}
-
-// void KalmanFilter::Init( VectorXd &x_in, 
-//     MatrixXd &P_in, 
-//     MatrixXd &F_in,
-//     MatrixXd &H_in, 
-//     MatrixXd &Hj_in, 
-//     MatrixXd &R_in, 
-//     MatrixXd &R_ekf_in, 
-//     MatrixXd &Q_in ) 
-// {
-//   cout << "In KalmanFilter::Init" << endl;
-//   x_ = x_in;
-//   P_ = P_in;
-//   F_ = F_in;
-//   H_ = H_in;
-//   Hj_ = Hj_in;
-//   // checking if eigen does a deep or shallow copy with
-//   // operator=.
-//   // cout << &Hj_(0) << endl;
-//   // cout << &Hj_in(0) << endl;
-//   // The two printed values are different so it appears to do a deep copy.
-//   // A deep copy is the desired behavior, because when I call Init in 
-//   // FusionEKF.cpp, some of the arguments have local scope.
-//   R_ = R_in;
-//   R_ekf_ = R_ekf_in;
-//   Q_ = Q_in;
-//   I_ = Eigen::MatrixXd::Identity(4,4);
-// }
 
 void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
                         MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in) {
@@ -73,7 +45,7 @@ void KalmanFilter::Update(const VectorXd &z)
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) 
 {
-  float px = x_[0];
+  float px = x_(0);
   float py = x_[1];
   float vx = x_[2];
   float vy = x_[3];
