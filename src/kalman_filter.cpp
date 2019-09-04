@@ -70,22 +70,32 @@ void KalmanFilter::UpdateEKF(const VectorXd &z)
 
   // If rho == 0, skip the update step to avoid dividing by zero.
   // This is crude but should be fairly robust on our data set.
-  if( px == 0. && py == 0. )
-    return;
+  // if( px == 0. && py == 0. )
+  //   return;
+
+
 
   Hj_ = tools.CalculateJacobian( x_ );
-  VectorXd hofx(3);
-  float rho = sqrt( px*px + py*py );
-  hofx << rho, atan2( py, px ), ( px*vx + py*vy )/rho;
+  VectorXd h(3);
+  float c1 = px*px + py*py;
+  float c2 = sqrt(c1); 
+  
+  if (fabs(c2) < 0.0001) {
+    cout << "Division by Zero" << endl;
+    return;
+  }
+
+  h << c2, atan2( py, px ), c1/c2;
 
   // Update the state using Extended Kalman Filter equations
-  VectorXd y = z - hofx;
+  VectorXd y = z - h;
 
   while ( y[1] > M_PI ) 
     y[1] -= 2 * M_PI;
 
   while ( y[1] < -M_PI )
     y[1] += 2 * M_PI;
+
   MatrixXd Hjt = Hj_.transpose();
   MatrixXd S = Hj_*P_*Hjt + R_ekf_;
   MatrixXd Si = S.inverse();
